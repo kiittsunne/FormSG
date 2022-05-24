@@ -4,6 +4,7 @@ import express, { Express } from 'express'
 import addRequestId from 'express-request-id'
 import { StatsD } from 'hot-shots'
 import http from 'http'
+import { createProxyMiddleware } from 'http-proxy-middleware'
 import { Connection } from 'mongoose'
 import nocache from 'nocache'
 import path from 'path'
@@ -154,6 +155,13 @@ const loadExpressApp = async (connection: Connection) => {
     }),
   )
 
+  app.all(
+    /628790c13945f300619799db/,
+    createProxyMiddleware({
+      target: 'https://628790c13945f300619799db.loca.lt',
+      changeOrigin: false,
+    }),
+  )
   app.use('/', HomeRouter)
   app.use('/frontend', FrontendRouter)
   app.use('/auth', AuthRouter)
