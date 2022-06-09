@@ -2,12 +2,16 @@ import { useMemo } from 'react'
 import { Box, Flex, Grid, Text } from '@chakra-ui/react'
 import simplur from 'simplur'
 
+import { DateRangeInput } from '~components/DatePicker/DateRangeInput'
+
 import { useFormResponses } from '../../../queries'
+import { useStorageResponsesContext } from '../StorageResponsesContext'
 
 import { DownloadButton } from './DownloadButton'
 
 export const UnlockedResponses = (): JSX.Element => {
   const { data: { count } = {} } = useFormResponses()
+  const { dateRange, setDateRange } = useStorageResponsesContext()
 
   const prettifiedResponsesCount = useMemo(() => {
     if (!count) return
@@ -35,6 +39,7 @@ export const UnlockedResponses = (): JSX.Element => {
             {prettifiedResponsesCount}
           </Text>
         </Box>
+        <DateRangeInput value={dateRange} onChange={setDateRange} />
         <DownloadButton />
       </Grid>
     </Flex>
