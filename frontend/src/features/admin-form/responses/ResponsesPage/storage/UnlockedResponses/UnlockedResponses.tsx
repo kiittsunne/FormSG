@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Box, Flex, Grid, Text } from '@chakra-ui/react'
+import { Box, Flex, Grid, Stack, Text } from '@chakra-ui/react'
 import simplur from 'simplur'
 
 import { DateRangeInput } from '~components/DatePicker/DateRangeInput'
@@ -39,8 +39,10 @@ export const UnlockedResponses = (): JSX.Element => {
             {prettifiedResponsesCount}
           </Text>
         </Box>
-        <DateRangeInput value={dateRange} onChange={setDateRange} />
-        <DownloadButton />
+        <Stack direction="row" gridArea="export" justifySelf="end">
+          <DateRangeInput value={dateRange} onChange={setDateRange} />
+          <DownloadButton />
+        </Stack>
       </Grid>
     </Flex>
   )
