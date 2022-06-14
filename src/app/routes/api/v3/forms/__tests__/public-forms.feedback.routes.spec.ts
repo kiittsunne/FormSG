@@ -19,7 +19,7 @@ import { PublicFormsRouter } from '../public-forms.routes'
 const app = setupApp('/forms', PublicFormsRouter)
 
 /**
- * TODO #3964: Remove 'public-form.feedback.routes' test, and keep 'public-form.submissions.feedback.routes'
+ * TODO #3964: Remove 'public-form.feedback.routes' test, and keep 'public-form.submissions.feedback.routes' test
  * once `/api/v3/forms/{formId}/feedback` route is cleaned up
  */
 describe('public-form.feedback.routes', () => {
@@ -167,6 +167,10 @@ describe('public-form.feedback.routes', () => {
   })
 })
 
+/**
+ * TODO #3964: Update the `describe` path from 'public-form.submissions.feedback.routes'
+ * to 'public-form.feedback.routes' once `/api/v3/forms/{formId}/feedback` route is cleaned up
+ */
 describe('public-form.submissions.feedback.routes', () => {
   let request: Session
 
