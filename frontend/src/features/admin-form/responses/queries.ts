@@ -2,7 +2,10 @@ import { useQuery, UseQueryResult } from 'react-query'
 import { useParams } from 'react-router-dom'
 
 import { FormFeedbackMetaDto } from '~shared/types'
-import { StorageModeSubmissionMetadataList } from '~shared/types/submission'
+import {
+  StorageModeSubmissionMetadataList,
+  SubmissionCountQueryDto,
+} from '~shared/types/submission'
 
 import { adminFormKeys } from '../common/queries'
 
@@ -15,7 +18,8 @@ import {
 export const adminFormResponsesKeys = {
   base: [...adminFormKeys.base, 'responses'] as const,
   id: (id: string) => [...adminFormResponsesKeys.base, id] as const,
-  count: (id: string) => [...adminFormResponsesKeys.id(id), 'count'] as const,
+  count: (id: string, dates: [startDate: string, endDate: string] | []) =>
+    [...adminFormResponsesKeys.id(id), 'count', ...dates] as const,
 }
 
 export const adminFormFeedbackKeys = {
@@ -26,13 +30,21 @@ export const adminFormFeedbackKeys = {
 /**
  * @precondition Must be wrapped in a Router as `useParam` is used.
  */
-export const useFormResponsesCount = (): UseQueryResult<number> => {
+export const useFormResponsesCount = (
+  dates?: SubmissionCountQueryDto,
+): UseQueryResult<number> => {
   const { formId } = useParams()
   if (!formId) throw new Error('No formId provided')
 
+  let dateParams: [startDate: string, endDate: string] | [] = []
+
+  if (dates?.startDate && dates.endDate) {
+    dateParams = [dates.startDate, dates.endDate]
+  }
+
   return useQuery(
-    adminFormResponsesKeys.count(formId),
-    () => countFormSubmissions({ formId }),
+    adminFormResponsesKeys.count(formId, dateParams),
+    () => countFormSubmissions({ formId, dates }),
     { staleTime: 10 * 60 * 1000 },
   )
 }
