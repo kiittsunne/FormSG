@@ -65,13 +65,17 @@ export class SpOidcClientCache extends NodeCache {
     // On expiry, refresh cache. If fail to refresh, log but do not throw error.
     this.on('expired', () =>
       this.refresh().catch((err) =>
-        console.error(`Failed to refresh cache on expiry. Reason: ${err}`),
+        console.warn(
+          `Attempted but failed to refresh sp oidc cache on expiry. Reason: ${err}`,
+        ),
       ),
     )
 
     // Trigger refresh on instantiation to populate cache. If fail to refresh, log but do not throw error.
     void this.refresh().catch((err) =>
-      console.error(`Failed to refresh cache on expiry. Reason: ${err}`),
+      console.warn(
+        `Attempted but failed to refresh sp oidc on instantiation. Reason: ${err}`,
+      ),
     )
   }
 
@@ -354,14 +358,18 @@ export class SpOidcClient {
     const baseClient = await this.getBaseClientFromCache()
     // Exchange Auth Code for tokenSet
 
+    console.log('AAAAA')
     const tokenSet = await baseClient.grant({
       grant_type: 'authorization_code',
       redirect_uri: this.#spOidcRpRedirectUrl,
       code: authCode,
+      client_id: 'fS0TUJM2h2myOAZrzjUjBWvNLsIrbDTc',
       client_assertion_type:
         'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
     })
 
+    console.log('tokenSet')
+    console.log('BBBBB')
     // Retrieve idToken from tokenSet
     const { id_token: idToken } = tokenSet
 
