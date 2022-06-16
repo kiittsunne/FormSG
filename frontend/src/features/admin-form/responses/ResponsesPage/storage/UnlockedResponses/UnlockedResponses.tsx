@@ -4,19 +4,18 @@ import simplur from 'simplur'
 
 import { DateRangeInput } from '~components/DatePicker/DateRangeInput'
 
-import { useFormResponses } from '../../../queries'
 import { useStorageResponsesContext } from '../StorageResponsesContext'
 
 import { DownloadButton } from './DownloadButton'
 
 export const UnlockedResponses = (): JSX.Element => {
-  const { data: { count } = {} } = useFormResponses()
-  const { dateRange, setDateRange } = useStorageResponsesContext()
+  const { dateRange, setDateRange, totalResponsesCount } =
+    useStorageResponsesContext()
 
   const prettifiedResponsesCount = useMemo(() => {
-    if (!count) return
-    return simplur` ${[count]}response[|s] to date`
-  }, [count])
+    if (!totalResponsesCount) return
+    return simplur` ${[totalResponsesCount]}response[|s] to date`
+  }, [totalResponsesCount])
 
   return (
     <Flex flexDir="column" h="100%">
@@ -34,7 +33,7 @@ export const UnlockedResponses = (): JSX.Element => {
         <Box gridArea="submissions">
           <Text textStyle="h4">
             <Text as="span" color="primary.500">
-              {count?.toLocaleString()}
+              {totalResponsesCount?.toLocaleString()}
             </Text>
             {prettifiedResponsesCount}
           </Text>
